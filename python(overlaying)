@@ -1,0 +1,140 @@
+import sys
+import os
+import threading
+from anthropic import Anthropic
+from PIL import Image
+import mss
+import pytesseract
+import pywinauto
+from pywinauto.win32functions import GetCursorPos
+
+from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout
+from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QObject
+from PyQt6.QtGui import QFont
+
+# Initialize Claude API Client
+anthropic_client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", "your-api-key-here"))
+
+class HybridTextExtractor:
+    """Extracts text using UI Automation first, falling back to OCR if needed."""
+    
+    @staticmethod
+    def get_text_at_cursor() -> tuple[str, str]:
+        """Returns tuple of (extracted_text, method_used)"""
+        pt = GetCursorPos()
+        x, y = pt.x, pt.y
+        
+        # --- PASS 1: Windows UI Automation ---
+        try:
+            elem = pywinauto.uia_element_info.UIAElementInfo.from_point(x, y)
+            uia_text = (elem.name or elem.rich_text or "").strip()
+            
+            # If UI Automation returned meaningful text (more than 3 chars), use it
+            if len(uia_text) > 3:
+                return uia_text, "UI Automation (Direct)"
+        except Exception:
+            pass  # Fall back to OCR if element reading fails
+
+        # --- PASS 2: OCR Fallback ---
+        try:
+            # Capture a 300x150 pixel box around mouse cursor
+            box_width, box_height = 300, 150
+            left = max(0, x - (box_width // 2))
+            top = max(0, y - (box_height // 2))
+            
+            with mss.mss() as sct:
+                monitor = {"top": top, "left": left, "width": box_width, "height": box_height}
+                sct_img = sct.grab(monitor)
+                pil_img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
+                
+                # Perform OCR on captured region
+                ocr_text = pytesseract.image_to_string(pil_img).strip()
+                if len(ocr_text) > 2:
+                    return ocr_text, "OCR Fallback"
+        except Exception as e:
+            print(f"OCR Error: {e}")
+
+        return "", "None"
+
+
+class SeniorHybridOverlay(QWidget):
+    """Floating transparent card displaying simplified explanation."""
+    
+    def __init__(self):
+        super().__init__()
+        self.init_ui()
+        self.last_text = ""
+
+    def init_ui(self):
+        # Always-on-top, borderless overlay
+        self.setWindowFlags(
+            Qt.WindowType.WindowStaysOnTopHint |
+            Qt.WindowType.FramelessWindowHint |
+            Qt.WindowType.Tool
+        )
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        
+        layout = QVBoxLayout()
+        
+        # High-contrast accessibility box
+        self.label = QLabel("Hover over any text or button to explain...")
+        self.label.setFont(QFont("Segoe UI", 15, QFont.Weight.Bold))
+        self.label.setStyleSheet("""
+            background-color: #0F172A;
+            color: #FACC15;
+            border: 3px solid #FACC15;
+            border-radius: 12px;
+            padding: 16px;
+            max-width: 380px;
+        """)
+        self.label.setWordWrap(True)
+        
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+        self.hide()
+
+    def process_hover(self):
+        pt = GetCursorPos()
+        text, method = HybridTextExtractor.get_text_at_cursor()
+        
+        # Only process if we found new text
+        if text and text != self.last_text:
+            self.last_text = text
+            self.move(pt.x + 25, pt.y + 25)
+            self.label.setText(f"Reading ({method})...")
+            self.show()
+            
+            # Translate using Claude in a background thread
+            threading.Thread(target=self._translate_with_claude, args=(text,), daemon=True).start()
+
+    def _translate_with_claude(self, raw_text: str):
+        try:
+            system_prompt = (
+                "You are a reassuring assistant for older adults.\n"
+                "Explain the provided technical text, error message, or button using a simple household analogy.\n"
+                "Keep your response strictly under 2 short sentences."
+            )
+            
+            response = anthropic_client.messages.create(
+                model="claude-3-5-sonnet-20241022",
+                max_tokens=150,
+                system=system_prompt,
+                messages=[{"role": "user", "content": f"Simplify this screen text: {raw_text}"}]
+            )
+            
+            simplified = response.content[0].text
+            QTimer.singleShot(0, lambda: self.label.setText(simplified))
+        except Exception:
+            QTimer.singleShot(0, lambda: self.label.setText("Could not translate this section right now."))
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    overlay = SeniorHybridOverlay()
+    
+    # Check screen element under cursor every 1 second
+    timer = QTimer()
+    timer.timeout.connect(overlay.process_hover)
+    timer.start(1000)
+    
+    sys.exit(app.exec())
