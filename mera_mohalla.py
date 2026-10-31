@@ -1,5 +1,5 @@
 """
-Dostana - "Your phone, explained as a neighbourhood"   (ALL-IN-ONE FILE)
+Dostana - "Your friend in the digital world"   (ALL-IN-ONE FILE)
 
 Is ek file mein DONO cheezein hain:
   1. Website (Flask): Bank, Chat, Post Office, The Gate, 6 stories, Translate, Read aloud
@@ -56,7 +56,7 @@ DB_PATH = os.path.join(BASE_DIR, "mohalla.db")
 
 app = Flask(__name__)
 app.secret_key = "change-this-secret"
-USER_NAME = "Abba Ji"          # <-- yahan naam badlein
+USER_NAME = "Janab"          # <-- yahan naam badlein
 
 
 # ======================================================================
@@ -85,8 +85,18 @@ PLACES = [
          desc=("Check if a message is a trick", "Check karein ke message dhoka to nahi")),
 ]
 
+SC = {
+    "door": '<svg viewBox="0 0 200 80" height="80" fill="none" stroke="#f3c9a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="40" y="8" width="38" height="64" rx="4"/><circle cx="68" cy="42" r="2.5" fill="#f3c9a6"/><circle cx="135" cy="26" r="13"/><path d="M118 26h34" stroke="#e0707a"/><path d="M112 72c0-16 10-24 23-24s23 8 23 24" stroke="#e0707a"/></svg>',
+    "call": '<svg viewBox="0 0 200 80" height="80" fill="none" stroke="#f3c9a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M40 14h16l7 18-9 6a40 40 0 0 0 18 18l6-9 18 7v16a6 6 0 0 1-6 6C58 76 30 48 34 20a6 6 0 0 1 6-6z" transform="scale(.8) translate(4 -2)"/><path d="M112 72V30l30-16 30 16v42M105 72h74M128 72V52h28v20" stroke="#e0707a"/></svg>',
+    "sms": '<svg viewBox="0 0 200 80" height="80" fill="none" stroke="#f3c9a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="38" y="8" width="44" height="64" rx="8"/><path d="M52 62h16"/><rect x="118" y="30" width="46" height="34" rx="3" stroke="#e0707a"/><path d="M118 36l23 15 23-15M141 30v-8M133 26l8-8 8 8" stroke="#e0707a"/></svg>',
+    "help": '<svg viewBox="0 0 200 80" height="80" fill="none" stroke="#f3c9a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M88 14H44a8 8 0 0 0-8 8v26a8 8 0 0 0 8 8h8v12l14-12h22a8 8 0 0 0 8-8V22a8 8 0 0 0-8-8z"/><path d="M62 30h18M62 42h12"/><path d="M148 20l10 20h-20z M148 52v2" stroke="#e0707a"/></svg>',
+    "parcel": '<svg viewBox="0 0 200 80" height="80" fill="none" stroke="#f3c9a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M40 28l32-16 32 16v34L72 78 40 62z" transform="translate(0 -4) scale(.9)"/><path d="M40 28l32 16 32-16M72 44v34" transform="translate(0 -4) scale(.9)"/><circle cx="148" cy="40" r="20" stroke="#e0707a"/><path d="M148 30v20M141 34h11a4 4 0 0 1 0 8h-8a4 4 0 0 0 0 8h11" stroke="#e0707a" transform="scale(.9) translate(16 4)"/></svg>',
+    "remote": '<svg viewBox="0 0 200 80" height="80" fill="none" stroke="#f3c9a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="30" y="10" width="64" height="44" rx="4"/><path d="M52 70h20M62 54v16"/><circle cx="148" cy="40" r="22" stroke="#e0707a"/><path d="M134 40h28M148 26v28" stroke="#e0707a" stroke-width="2"/></svg>',
+    "done": '<svg viewBox="0 0 200 80" height="80" fill="none" stroke="#f3c9a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="40" r="26"/><path d="M88 41l9 9 16-18" stroke="#e0707a"/></svg>'
+}
+
 STORIES = [
-    dict(id=1, scene="🚪🕶️",
+    dict(id=1, scene=SC["door"],
          title=("A stranger is at your door", "Ek ajnabi darwaze par hai"),
          text=('He says: "Congratulations! You won a prize. Tell me the code on your phone."',
                'Woh kehta hai: "Mubarak ho, inaam nikla hai! Apne phone ka code bata dein."'),
@@ -96,7 +106,7 @@ STORIES = [
                "Bilkul theek! Phone ka code kisi ko na batayein."),
          bad=("No! That code can empty your bank account.",
               "Nahi! Is code se aap ka account khali ho sakta hai.")),
-    dict(id=2, scene="📞🏦",
+    dict(id=2, scene=SC["call"],
          title=("A call from 'the bank'", "'Bank' se phone aaya"),
          text=('A voice says: "Your account will be blocked today. Tell me the OTP we just sent."',
                'Awaaz kehti hai: "Aap ka account aaj band ho jayega. Abhi bheja gaya OTP bata dein."'),
@@ -106,7 +116,7 @@ STORIES = [
                "Bilkul theek! Asli bank kabhi OTP nahi poochta."),
          bad=("No! Whoever asks for the OTP is a thief.",
               "Nahi! OTP mangne wala chor hota hai.")),
-    dict(id=3, scene="📱🎁",
+    dict(id=3, scene=SC["sms"],
          title=("A prize message with a link", "Inaam ka message aur link"),
          text=('SMS: "You won Rs 500,000! Click this link to collect your prize."',
                'SMS: "Aap ne 5 lakh rupay jeete! Inaam lene ke liye link dabayein."'),
@@ -116,7 +126,7 @@ STORIES = [
                "Bilkul theek! Inaam ke link paisay aur data chura lete hain."),
          bad=("No! Clicking can install bad software on your phone.",
               "Nahi! Link dabane se phone mein kharab software aa sakta hai.")),
-    dict(id=4, scene="💬🆘",
+    dict(id=4, scene=SC["help"],
          title=("'Your grandson' needs money", "'Aap ka pota' paisay mang raha hai"),
          text=('WhatsApp from a new number: "Dadu, I lost my phone. Send Rs 20,000 now, please."',
                'Naye number se WhatsApp: "Dadu, mera phone kho gaya. Abhi 20,000 bhej dein."'),
@@ -126,7 +136,7 @@ STORIES = [
                "Bilkul theek! Paisay bhejne se pehle call kar ke tasdeeq karein."),
          bad=("No! This is a common trick. Call first.",
               "Nahi! Yeh aam dhoka hai. Pehle call karein.")),
-    dict(id=5, scene="📦💸",
+    dict(id=5, scene=SC["parcel"],
          title=("A parcel needs a fee", "Parcel ki fees maangi ja rahi hai"),
          text=('Message: "Your parcel is stuck. Pay Rs 150 at this link to receive it."',
                'Message: "Aap ka parcel ruka hai. Wasool karne ke liye is link par 150 rupay dein."'),
@@ -136,7 +146,7 @@ STORIES = [
                "Bilkul theek! Choti fees se card ki maloomat chori hoti hain."),
          bad=("No! They want your card number.",
               "Nahi! Woh aap ka card number chahte hain.")),
-    dict(id=6, scene="🖥️🛠️",
+    dict(id=6, scene=SC["remote"],
          title=("'Helper' wants to fix your phone", "'Madadgar' phone theek karna chahta hai"),
          text=('A caller says: "Install this app so I can fix your phone from here."',
                'Caller kehta hai: "Yeh app install karein, main door se phone theek kar doon ga."'),
@@ -430,7 +440,7 @@ main{flex:1;padding:28px;max-width:1200px;width:100%;margin:0 auto}
 h2{font-size:44px;margin-bottom:6px}.sub{font-size:24px;margin-bottom:20px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
-.card{background:#fff;border:3px solid var(--ink);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.card{background:#fff;border:2px solid #e6d3c6;box-shadow:0 4px 14px rgba(90,30,40,.10);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:14px}
 .card .head{display:flex;gap:14px}
 .icon{width:62px;height:62px;border-radius:14px;background:var(--mint);display:grid;place-items:center;font-size:32px;flex:none}
 .card h3{font-size:30px;line-height:1.1;margin-bottom:6px}
@@ -449,14 +459,14 @@ aside h3{font-size:32px;margin-bottom:10px}aside p{margin-bottom:10px;font-size:
 .fb{margin-top:14px;padding:14px;border-radius:12px;display:none}
 .fb.good{display:block;background:#2f6b4f}.fb.bad{display:block;background:#8c3b2a}
 .fb .ur{color:#fff}
-footer{background:var(--foot);border-top:3px solid var(--ink);padding:14px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+footer{background:var(--foot);border-top:2px solid #e6d3c6;padding:14px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .progress{display:flex;align-items:center;gap:10px;font-weight:700;flex-wrap:wrap}
 .box{width:36px;height:36px;border:3px solid var(--green);border-radius:8px;background:#fff;display:inline-block}
 .box.done{background:var(--green)}
 .family{background:#fff;border:3px solid var(--ink);border-radius:40px;padding:12px 26px;font-size:23px;font-weight:700}
 .flash{max-width:1200px;margin:16px auto 0;padding:14px 20px;border-radius:12px;font-weight:600;width:calc(100% - 56px)}
 .flash.ok{background:#cfe8da}.flash.error{background:#f5d3c9}
-.panel{background:#fff;border:3px solid var(--ink);border-radius:20px;padding:24px;margin-bottom:20px}
+.panel{background:#fff;border:2px solid #e6d3c6;box-shadow:0 4px 14px rgba(90,30,40,.10);border-radius:20px;padding:24px;margin-bottom:20px}
 label{display:block;font-weight:700;margin:12px 0 6px}
 input[type=text],input[type=number],select,textarea{width:100%;padding:12px;font-size:22px;border:3px solid var(--ink);border-radius:12px;font-family:inherit}
 textarea{min-height:140px}
@@ -468,15 +478,17 @@ table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:2px so
 .back{display:inline-block;margin-bottom:16px;font-weight:700;color:var(--green);font-size:22px}
 .letter .why{display:none;margin-top:10px;padding:10px;border-radius:10px;background:var(--mint)}
 .letter.answered .why{display:block}
-
+.ic{width:1.1em;height:1.1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;margin-right:8px}
+.icon svg{width:34px;height:34px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn.alt{display:flex;align-items:center;justify-content:center;white-space:nowrap}
 </style></head>
 <body>
 <header>
-  <a class="brand" href="{{ url_for('home') }}"><h1>🏠 Dostana</h1><small>Your phone, explained as a neighbourhood</small></a>
+  <a class="brand" href="{{ url_for('home') }}"><h1><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6"/></svg>Dostana</h1><small>Your friend in the digital world</small></a>
   <div class="top-btns">
-    <button class="pill" id="transAll" type="button">🌐 Translate all to Roman Urdu</button>
-    <button class="pill" id="readAloud" type="button">🔊 Read aloud</button>
-    <a class="pill" href="{{ url_for('settings') }}">⚙️</a>
+    <button class="pill" id="transAll" type="button"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>Translate all to Roman Urdu</button>
+    <button class="pill" id="readAloud" type="button"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9z"/><path d="M16 8a5 5 0 0 1 0 8M19 5a9 9 0 0 1 0 14"/></svg>Read aloud</button>
+    <a class="pill" href="{{ url_for('settings') }}"><svg class="ic" style="margin:0" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></a>
   </div>
 </header>
 {% for m in get_flashed_messages() %}
@@ -490,16 +502,19 @@ table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:2px so
     <span id="count">{{ done }} of {{ total }} stories finished</span>
   </div>
   {% if family_number %}
-  <a class="family" target="_blank" href="https://wa.me/{{ family_number }}">📞 Ask my family</a>
+  <a class="family" target="_blank" href="https://wa.me/{{ family_number }}"><svg class="ic" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Ask my family</a>
   {% else %}
-  <a class="family" href="{{ url_for('settings') }}">📞 Add family number</a>
+  <a class="family" href="{{ url_for('settings') }}"><svg class="ic" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Add family number</a>
   {% endif %}
 </footer>
 <script>
 const body = document.body, tBtn = document.getElementById('transAll');
+const G='<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>';
+const SPK='<svg class="ic" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9z"/><path d="M16 8a5 5 0 0 1 0 8M19 5a9 9 0 0 1 0 14"/></svg>';
+const STOP='<svg class="ic" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
 function applyRoman(on){
   body.classList.toggle('roman', on);
-  tBtn.textContent = on ? '🌐 Show English only' : '🌐 Translate all to Roman Urdu';
+  tBtn.innerHTML = G + (on ? 'Show English only' : 'Translate all to Roman Urdu');
   try{ localStorage.setItem('roman', on ? '1' : '0'); }catch(e){}
 }
 try{ applyRoman(localStorage.getItem('roman') === '1'); }catch(e){}
@@ -508,7 +523,7 @@ tBtn.onclick = () => applyRoman(!body.classList.contains('roman'));
 // ---- Read aloud: pehle browser ki awaaz, na chale to computer ki apni awaaz ----
 const raBtn = document.getElementById('readAloud');
 let reading = false, session = 0, keepAlive = [];
-function setReading(on){ reading = on; raBtn.textContent = on ? '⏹ Stop reading' : '🔊 Read aloud'; }
+function setReading(on){ reading = on; raBtn.innerHTML = on ? STOP + 'Stop reading' : SPK + 'Read aloud'; }
 function postJSON(url, obj){
   return fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(obj || {})});
 }
@@ -586,6 +601,12 @@ function toggleShow(btn){ btn.closest('.card, .letter').classList.toggle('show')
 </body></html>"""
 
 HOME = """{% extends 'base.html' %}{% block content %}
+{% set icons = {
+'Bank':'<svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M9 21V10M15 21V10M19 21V10M3 10l9-6 9 6"/></svg>',
+'Chat with family':'<svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>',
+'Post Office':'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+'The Gate':'<svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>'
+} %}
 <div class="two">
   <section>
     <h2>Hello, {{ user_name }}.</h2>
@@ -593,11 +614,11 @@ HOME = """{% extends 'base.html' %}{% block content %}
     <div class="grid">
     {% for p in places %}
       <div class="card">
-        <div class="head"><div class="icon">{{ p.icon }}</div>
+        <div class="head"><div class="icon">{{ icons.get(p.name[0], p.icon)|safe }}</div>
           <div><h3>{{ T(*p.name) }}</h3><p>{{ T(*p.desc) }}</p></div></div>
         <div class="row">
           <a class="btn" href="{{ url_for(p.url) }}">Go</a>
-          <button class="btn alt" type="button" onclick="toggleShow(this)">🌐 Translate</button>
+          <button class="btn alt" type="button" onclick="toggleShow(this)"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>Translate</button>
         </div>
       </div>
     {% endfor %}
@@ -606,7 +627,7 @@ HOME = """{% extends 'base.html' %}{% block content %}
   <aside>
     <div class="label">TODAY'S STORY</div>
     {% if story %}
-      <div class="scene">{{ story.scene }}</div>
+      <div class="scene">{{ story.scene|safe }}</div>
       <h3>{{ T(*story.title) }}</h3>
       <p>{{ T(*story.text) }}</p>
       {% for c in story.choices %}
@@ -615,7 +636,7 @@ HOME = """{% extends 'base.html' %}{% block content %}
       <div class="fb" id="fb"></div>
       <a class="choice" id="next" href="{{ url_for('home') }}" style="display:none;text-align:center">Next story &rarr;</a>
     {% else %}
-      <div class="scene">🎉</div>
+      <div class="scene"><svg viewBox="0 0 200 80" height="80" fill="none" stroke="#f3c9a6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="40" r="26"/><path d="M88 41l9 9 16-18" stroke="#e0707a"/></svg></div>
       <h3>{{ T('All stories finished!', 'Saari kahaniyan mukammal!') }}</h3>
       <p>{{ T('Well done. You can spot a trick now.', 'Shabash. Ab aap dhoka pehchan sakte hain.') }}</p>
     {% endif %}
@@ -643,7 +664,7 @@ async function answer(id, idx){
 
 BANK = """{% extends 'base.html' %}{% block content %}
 <a class="back" href="{{ url_for('home') }}">&larr; Back</a>
-<h2>🏛️ {{ T('Bank', 'Bank') }}</h2>
+<h2>{{ T('Bank', 'Bank') }}</h2>
 <div class="warn">{{ T('Practice bank: this is not real money. Learn safely here.',
   'Mashq ka bank: yeh asli paisay nahi. Yahan mehfooz tareeqe se seekhein.') }}</div>
 <div class="panel" style="margin-top:18px">
@@ -678,14 +699,14 @@ BANK = """{% extends 'base.html' %}{% block content %}
 
 CHAT = """{% extends 'base.html' %}{% block content %}
 <a class="back" href="{{ url_for('home') }}">&larr; Back</a>
-<h2>💬 {{ T('Chat with family', 'Family se baat karein') }}</h2>
+<h2>{{ T('Chat with family', 'Family se baat karein') }}</h2>
 <p class="sub">{{ T('Tap a name to open WhatsApp or make a call.', 'WhatsApp kholne ya call karne ke liye naam dabayein.') }}</p>
 {% for c in contacts %}
 <div class="panel" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
   <div><h3>{{ c.name }}</h3><p>+{{ c.number }}</p></div>
   <div class="row" style="margin:0">
     <a class="btn" target="_blank" href="https://wa.me/{{ c.number }}">WhatsApp</a>
-    <a class="btn alt" href="tel:+{{ c.number }}">📞 Call</a>
+    <a class="btn alt" href="tel:+{{ c.number }}"><svg class="ic" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Call</a>
   </div>
 </div>
 {% else %}
@@ -699,7 +720,7 @@ CHAT = """{% extends 'base.html' %}{% block content %}
 
 POST = """{% extends 'base.html' %}{% block content %}
 <a class="back" href="{{ url_for('home') }}">&larr; Back</a>
-<h2>✉️ {{ T('Post Office', 'Dakghar') }}</h2>
+<h2>{{ T('Post Office', 'Dakghar') }}</h2>
 <p class="sub">{{ T('Read each letter. Is it real or a trick?', 'Har khat parhein. Asli hai ya dhoka?') }}</p>
 {% for l in letters %}
 <div class="panel letter" data-scam="{{ 1 if l.scam else 0 }}">
@@ -727,7 +748,7 @@ function judge(btn, guessScam){
 
 GATE = """{% extends 'base.html' %}{% block content %}
 <a class="back" href="{{ url_for('home') }}">&larr; Back</a>
-<h2>🛡️ {{ T('The Gate', 'Darwaza') }}</h2>
+<h2>{{ T('The Gate', 'Darwaza') }}</h2>
 <p class="sub">{{ T('Paste a message you got. We will tell you if it looks like a trick.',
   'Jo message aaya hai yahan paste karein. Hum batayenge ke dhoka lagta hai ya nahi.') }}</p>
 <div class="panel">
@@ -748,7 +769,7 @@ GATE = """{% extends 'base.html' %}{% block content %}
 
 SETTINGS = """{% extends 'base.html' %}{% block content %}
 <a class="back" href="{{ url_for('home') }}">&larr; Back</a>
-<h2>⚙️ {{ T('Family numbers', 'Family ke number') }}</h2>
+<h2>{{ T('Family numbers', 'Family ke number') }}</h2>
 <div class="panel">
   {% for c in contacts %}
   <form method="post" style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:2px solid #ddd">
@@ -1235,7 +1256,7 @@ class FloatingButton(QWidget):
         self.label.setFont(QFont("Segoe UI", 13, QFont.Weight.Bold))
         self.label.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
         self.label.setStyleSheet(f"""
-            background-color: #1F5E4D; color: white;
+            background-color: #8B1E2D; color: white;
             border: 4px solid #FACC15; border-radius: {BUTTON_SIZE // 2}px;
         """)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -1421,9 +1442,9 @@ class AnswerCard(QWidget):
         b.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
         b.setCursor(Qt.CursorShape.PointingHandCursor)
         b.setStyleSheet("""
-            QPushButton { background:#1F5E4D; color:white; border:2px solid #FACC15;
+            QPushButton { background:#8B1E2D; color:white; border:2px solid #FACC15;
                           border-radius:10px; padding:8px 10px; }
-            QPushButton:hover { background:#2a7a64; }
+            QPushButton:hover { background:#A82A3C; }
             QPushButton:disabled { background:#334155; color:#94a3b8; border-color:#64748b; }
         """)
         return b
